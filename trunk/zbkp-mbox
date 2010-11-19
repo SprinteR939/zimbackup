@@ -1,0 +1,30 @@
+#!/bin/bash
+
+ZHOME=/opt/zimbra
+ZBACKUP=/backup/mailbox
+ZBKPTEMP=/backup/bkptemp
+ZCONFD=$ZHOME/conf
+DATE=`date +"%d%m%y"`
+ZDUMPDIR=$ZBACKUP/$DATE
+ZMBOX=/opt/zimbra/bin/zmmailbox
+
+if [ $# -eq 0 ]; then
+ qd=`date --date='1 days ago' +"%m/%d/%Y"`
+ query="&query=after:$qd"
+fi
+
+
+if [ ! -d $ZDUMPDIR ]; then
+	mkdir -p $ZDUMPDIR
+fi
+
+if [ ! -d $ZBKPTEMP ]; then
+	mkdir -p $ZBKPTEMP
+fi
+
+for mbox in `zmprov -l gaa`
+do
+	$ZMBOX -z -m $mbox getRestURL "//?fmt=tgz$query" > $ZDUMPDIR/$mbox.tgz
+done
+
+
