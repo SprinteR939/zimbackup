@@ -1,5 +1,6 @@
 #!/bin/bash
 
+EMAIL="put.yourmail@here.com"
 ZHOME=/opt/zimbra
 ZBACKUP=/backup/mysql
 ZCONFD=$ZHOME/conf
@@ -35,4 +36,4 @@ done
 #
 
 #$ZMDUMP -u root -S $logger_mysql_socket --password=$mysql_logger_root_password zimbra_logger | gzip -9 - > $ZDUMPDIR/zimbra_logger.sql.gz
-echo "" | mail -s "zbkp-mysql complete" alejandro.flores@triforsec.com.br
+echo "" | mail -s "zbkp-mysql complete" $EMAIL
