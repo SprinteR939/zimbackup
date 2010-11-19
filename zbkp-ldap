@@ -1,0 +1,19 @@
+#!/bin/bash
+# Script para backup da base LDAP
+
+ZHOME=/opt/zimbra
+ZBACKUP=/backup/ldap
+ZCONFD=$ZHOME/conf
+DATE=`date +"%a"`
+ZDUMPDIR=$ZBACKUP/$DATE
+
+if [ ! -d $ZDUMPDIR ]; then
+        mkdir -p $ZDUMPDIR
+fi
+
+# LDAP Backup
+$ZHOME/openldap/sbin/slapcat -F /opt/zimbra/data/ldap/config > $ZDUMPDIR/dump.ldiff
+tar -zcf $ZDUMPDIR/ldap-complete.tgz /opt/zimbra/data/ldap/config
+
+echo "Fim" | mail -s "zbkp-ldap complete" alejandro.flores@triforsec.com.br
+
