@@ -27,11 +27,13 @@ ZDUMPDIR=$ZBACKUP/$DATE
 # Path to zmmailbox
 ZMBOX=/opt/zimbra/bin/zmmailbox
 
+# If you dont pass any argument, then I'll backup just what happened from yesterday. If you do, I'll perform a full backup of the account.
 if [ $# -eq 0 ]; then
  qd=`date --date='1 days ago' +"%m/%d/%Y"`
  query="&query=after:$qd"
 fi
 
+# Check if the backup dir exists, create if not.
 if [ ! -d $ZDUMPDIR ]; then
 	mkdir -p $ZDUMPDIR
 fi
