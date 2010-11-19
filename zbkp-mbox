@@ -1,11 +1,30 @@
 #!/bin/bash
 
+# To backup in zip format:
+#FORMAT=zip  
+
+# Ta backup em tar gzipped format:
+FORMAT=tgz
+
+# Where your zimbra lives
 ZHOME=/opt/zimbra
+
+# Path to backup base dir
 ZBACKUP=/backup/mailbox
-ZBKPTEMP=/backup/bkptemp
+
+# Where the configuration files for zimbra lives
 ZCONFD=$ZHOME/conf
+
+# Use this DATE to have /backup/mailbox/{Mon,Tue,Wed...} directory of backups
+#DATE=DATE=`date +"%a"`
+
+# Use this DATE to have (eg.) /backup/mailbox/30112010 
 DATE=`date +"%d%m%y"`
+
+# Where to store the files
 ZDUMPDIR=$ZBACKUP/$DATE
+
+# Path to zmmailbox
 ZMBOX=/opt/zimbra/bin/zmmailbox
 
 if [ $# -eq 0 ]; then
@@ -13,18 +32,14 @@ if [ $# -eq 0 ]; then
  query="&query=after:$qd"
 fi
 
-
 if [ ! -d $ZDUMPDIR ]; then
 	mkdir -p $ZDUMPDIR
 fi
 
-if [ ! -d $ZBKPTEMP ]; then
-	mkdir -p $ZBKPTEMP
-fi
-
+# Querying for the accounts then backing up 
 for mbox in `zmprov -l gaa`
 do
-	$ZMBOX -z -m $mbox getRestURL "//?fmt=tgz$query" > $ZDUMPDIR/$mbox.tgz
+	$ZMBOX -z -m $mbox getRestURL "//?fmt=${FORMAT}$query" > $ZDUMPDIR/$mbox.${FORMAT}
 done
 
 
